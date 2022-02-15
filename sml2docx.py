@@ -204,11 +204,13 @@ def processRowsLMS(inputRows):
                 mycat="Indent2"
             elif (mycat=="N"):
                 mycat="Note"
+            elif (mycat=="RE"):
+                    mycat="Recitals"
             
             # This will check whether semantic code at end of lmd line is in our database
             #TO DO: remove trailing white space before testing
             #TO DO: just look up database entries
-            mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NB","PL","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN","Sched1"] 
+            mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NB","PL","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN","Sched1","Recitals"] 
             try:
                 if (mylist.index(mycat) is not None):
                     updateDB='TRUE'
@@ -368,11 +370,13 @@ def readRowsSpam(csvfile):
                     mycat="Indent2"
                 elif (mycat=="N"):
                     mycat="Note"
+                elif (mycat=="RE"):
+                    mycat="Recitals"
                 
                 # This will check whether semantic code at end of lmd line is in our database
                 #TO DO: remove trailing white space before testing
                 #TO DO: just look up database entries
-                mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NP2","NB","PL","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN"]
+                mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NP2","NB","PL","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN","Recitals"]
                 try:
                     if (mylist.index(mycat) is not None):
                         updateDB='TRUE'
@@ -416,9 +420,9 @@ def prepareParagraph(paracode,content):
     global blockdict
     # Obtain parastyle from semantic code
     paratype="Indent1" # default
-    mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NP2","NB","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN","Sched1"]
+    mylist=["LH","LHF","LC","LCF","LCFF","H1","H2","H3","H4","H5","IN","Indent1","Indent2","Indent0","GD","LD","ST","DT","BC","CH","Note","None","NP","NP2","NB","B","SB","PB","LDP0","LDP1","LDdate","LDB","LDBN","LN","Sched1","RE","Recitals"]
     # These styles must be defined in the template used. TO DO: set them according to source file
-    mystyles=["H1","Indent1","H2","Indent1","H3","H1","H2","H3","H4","H5","Indent1","Indent1","Indent2","IndentNoSpace","Indent1","Indent1","SUBTITLE","DocTitle","BoldCentred","CentredHeading","Note","Note","NumParas","NumParas2","NumParasBold","BoldHeading","SectionBreak","PageBreak","LDP0","LDP1","LDdate","LDB","LDBN","LN","SCHEDL1"]
+    mystyles=["H1","Indent1","H2","Indent1","H3","H1","H2","H3","H4","H5","Indent1","Indent1","Indent2","IndentNoSpace","Indent1","Indent1","SUBTITLE","DocTitle","BoldCentred","CentredHeading","Note","Note","NumParas","NumParas2","NumParasBold","BoldHeading","SectionBreak","PageBreak","LDP0","LDP1","LDdate","LDB","LDBN","LN","SCHEDL1","Rectials","Recitals"]
     # What is the index number of the semantic code supplied?
     myindex=mylist.index(paracode)
     # What is the index number of the lmd style code for this paragraph?

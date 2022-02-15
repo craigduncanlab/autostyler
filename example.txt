@@ -1,32 +1,5 @@
 meta:legaldoc
 
-LEASE
-
-Doug (ACN 123 456 789) 
-
-AS Trustee for the Candy Cove Property Trust 
-
-("Lessor") 
-
-
-
-Craig (ACN 123 456 789) 
-
-AS Trustee for the Some Silly Trust 
-
-("Lessee") 
-
-
-
-
-
-223 Harbour Road, Baystown
-
-LEASE OF PREMISES
-
-
-/PageBreak
-
 DEED OF LEASE
 
 THIS DEED is made on 1 February 2022 

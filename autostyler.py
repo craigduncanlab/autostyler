@@ -72,12 +72,14 @@ def chooseMemoScheme():
 # StylesTemplateB uses H2 in lvlnames, rather than Indent.
 
 def chooseLegalDocScheme():
-	global h1code,h1code_nonum,STcode,h2code,notescode,lvlnames,schemename
+	global h1code,h1code_nonum,REcode,STcode,h2code,notescode,lvlnames,schemename,indentCode
 	print("legal Doc Scheme. OK")
 	schemename="legaldoc" # we could also input a type of legal doc template
 	h1code="#H1" # boldheading
 	h2code="#H2"
 	STcode="#ST"
+	REcode="#RE"
+	indentCode="#Indent1"
 	h1code_nonum="#LDB" # boldheading
 	notescode="#N"
 	lvlnames=["H2","H3","H4","H5"]  # is this only for lists?
@@ -110,9 +112,12 @@ def processLegalMarkdown(myArray,notesOn):
 	#exit()
 	#arraysize=len(myArray)
 	#signindex=0
-		
+	previtem="test#H1"	# default
+	newitem=""
 	linecount=0
+	counter=0
 	for item in myArray:
+		counter=counter+1
 		linecount=linecount+1
 		first1=item[:1]
 		first2=item[:2]
@@ -157,6 +162,7 @@ def processLegalMarkdown(myArray,notesOn):
 			#exit()
 			for y in newparas:
 				output.append(y)
+				previtem=y
 				processed=True
 	
 		# --- DEFAULT MARKDOWN SCHEME
@@ -164,6 +170,7 @@ def processLegalMarkdown(myArray,notesOn):
 			newitem=processGeneralItem(item,lvl,linecount)
 			if len(newitem)>0:
 				output.append(newitem)
+				previtem=newitem
 				newitem=""
 			processed=True
 
@@ -174,15 +181,20 @@ def processLegalMarkdown(myArray,notesOn):
 			newitem=processLetterItem(item,lvl,linecount)
 			if len(newitem)>0:
 				output.append(newitem)
+				previtem=newitem
 				newitem=""
 			processed=True
 		
-		# --- IF LEGAL DOC
-		
+		# --- IF LEGAL DOC THIS IS LAST OPTION
+		# TO DO: store some state information about previous entry
 		if (semicolnum<=1 and schemename=="legaldoc" and processed==False):
-			newitem=processLegalDocItem(item,lvl)
+			if len(previtem)<0:
+				print("no prev item in process function")
+				exit(0)
+			newitem=processLegalDocItem(item,previtem,counter,lvl)
 			if len(newitem)>0:
 				output.append(newitem)
+				previtem=newitem
 				newitem=""
 			processed=True
 
@@ -192,8 +204,11 @@ def processLegalMarkdown(myArray,notesOn):
 			newitem=processMemoItem(item,lvl,linecount)
 			if len(newitem)>0:
 				output.append(newitem)
+				previtem=newitem
 				newitem=""
 			processed=True	
+		
+		
 
 	return output
 
@@ -239,8 +254,8 @@ def processGeneralItem(item,lvl,linecount):
 #
 # the default level that is not a heading (1) is first entry in lvlnames
 #
-def processLegalDocItem(item,lvl):
-	global h1code,h1code_nonum,STcode,h2code,notescode,lvlnames
+def processLegalDocItem(item,lastitem,counter,lvl):
+	global h1code,h1code_nonum,REcode,STcode,h2code,notescode,lvlnames,indentCode
 	style="none"
 	#analysis of prefix and suffix only at this stage
 	first1=item[:1]
@@ -249,7 +264,11 @@ def processLegalDocItem(item,lvl):
 	first5=item[:5]
 	last1=item[-1:]
 	last3=item[-3:]
-	words=item.split(' ')
+	if len(lastitem)<1:
+		print("No last item, counter:"+str(counter))
+		exit()
+	pkey=lastitem[-3:]
+	words=item.split(' ') # outputs array
 	if(first1!="-" and len(words)<10 and last1!="." and "#" not in last3 and ":" not in last3):
 		style=h1code
 		# check for permitted characters (and uppercase)
@@ -257,17 +276,26 @@ def processLegalDocItem(item,lvl):
 			if(a!="'" and a!="," and a!=" " and a!="?" and a!="!" and a.isupper()==False):
 				style=h2code
 		# for heading-like phrases that are not to be numbered:
-		if len(words)>=3 and ("DEED OF" in words or "THIS DEED" in words):
+
+		if len(words)>2:
+			for test in words:
+				if ("DEED OF" in item or "THIS DEED" in item or "AGREED" in test):
+					style=STcode # bold heading
+		if len(words)==1 and ("AND" in words or "BETWEEN" in words):
 			style=STcode # bold heading
-		if len(words)==3 and ("AGREED" in words):
+		if len(words)==1 and ("RECITALS" in words):
 			style=STcode # bold heading
-		if len(words)==1 and ("AND" in words or "BETWEEN" in words or "RECITALS" in words):
-			style=STcode # bold heading
-		if len(words)==2:
-			print(words)
-			#exit()
 	else :
-		style="#"+lvlnames[lvl] 
+		print("looking for another code, last item is :"+lastitem)
+		print("looking for another code, last item suffix is :"+pkey)
+		if (STcode==pkey and ("RECITALS" not in lastitem)):
+			style=indentCode # set indent style if the previous level is a schedule title
+		elif (STcode==pkey and ("RECITALS") in lastitem):
+			style=REcode
+		elif (REcode==pkey):
+			style=REcode # default to recitals style if there.  
+		else:
+			style="#"+lvlnames[lvl] # TO DO.  General pattern of retaining same style as previous?
 
 	newitem=item+style
 	return newitem
