@@ -24,7 +24,9 @@ Double-forward-slash in the input file // can be used to indicate a comments (no
 
 (ensure you have python3 installed on your system)
 
+```
 python3 autostyler.py -n filename.txt
+```
 
 Options:
 
@@ -40,7 +42,10 @@ See example file : KnitExample.Rmd
 
 Then run the following from an R Studio console:
 
+
+```
 rmarkdown::render(input = "~/Documents/Path/KnitExample.Rmd",intermediates_dir="~/Documents/Path/output",run_pandoc=FALSE)
+```
 
 This will produce a markdown output file with .md extension
 
