@@ -1,0 +1,251 @@
+---
+output:
+  word_document: 
+    reference_docx: "StylesTemplateB.docx"
+  #word_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)  
+
+# the above uses the opts_chunk but there are also {r package-options and  knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+# First, we associate our list object with a name for a role.   The reason for this is that it allows us to group data associated with
+# a person, which happens to be very useful for the way lawyers associate data.
+
+# The following example is hard coded, but if you can load in these lists from CSV files (or similar), then you have an easy mechanism for updating the data in a template.
+
+# The scheme for using these lists in a rational way is to name the elements of the list so that they can be accessed by name.  This allows us to insert those names into our template, providing the link between our data.
+
+# The same approach could be combined with other programming languages and different computer software.
+
+Lessor<-list("1 February 2022","Doug","32 Kings Park Road, Perth","ACN 123 456 789","Candy Cove Property Trust","13 Brigadoon Road,Swan Valley")
+Lessee<-list("None","Craig","50 Stirling Highway, Nedlands","ACN 123 456 789","Some Silly Trust","123 Folly Road, Osborne Park")
+
+
+# Many legal situations require us to refer to the same kind of data (e.g. in a list), but just for different legal people or entities.
+# With R we can design a scheme in which the attributes of similar lists are named the same.
+# i.e. we can use the same list of names for the elements multiple times.
+
+personattributes <- c("date","pername","address","ACN","TrustName","TrustAddress")  
+names(Lessor)<-personattributes
+names(Lessee)<-personattributes
+
+Premises<-list("223 Harbour Road, Baystown","Certificate of Title Volume 1111 Folio 222")
+premisesattributes<-c("Address","CertTitle")
+names(Premises)<-premisesattributes
+
+Lease<-list("the business of providing services relating to Droid Making")
+names(Lease)<-c("Purpose")
+
+Rent<-list("$123,000")
+names(Rent)<-c("Start")
+
+periodattributes<-c("Period","Start","End")
+Term<-list("five year","1 April 2016","31 March 2020")
+names(Term)<-periodattributes
+
+Option<-list("five year","1 April 2020","31 March 2025")
+names(Option)<-periodattributes
+
+# A named list member can also be referenced directly with the "$" operator in lieu of the double square bracket operator
+# A template text will rely on the name you have given the list members, but not care how you came to assign the name.
+
+
+# within the main text, the single backticks surrounds inline code, so for the occupation variable, the preceding r inside the backticks indicates the language, and since echo is still on, we get our variable value.  Possibly, if there was non-r code, we might be able to change the reference to another language.
+
+# The footnotes use a reference link, rather than an inline link.  The ^ ensures the link is a footnote link in both places.
+
+# run this in the R Studio console to obtain the intermediate .md file before pandoc is run for creating word
+# rmarkdown::render(input = "~/Documents/2022_WebCD/Variables_Text_Example2.Rmd", run_pandoc=FALSE)
+
+```
+meta:legaldoc
+
+LEASE
+
+`r Lessor$pername` (`r Lessor$ACN`) 
+
+AS Trustee for the `r Lessor$TrustName` 
+
+("Lessor") 
+
+
+
+`r Lessee$pername` (`r Lessee$ACN`) 
+
+AS Trustee for the `r Lessee$TrustName` 
+
+("Lessee") 
+
+
+
+
+
+`r Premises$Address`
+
+LEASE OF PREMISES
+
+
+\newpage
+
+DEED OF LEASE
+
+THIS DEED is made on `r Lessor$date` 
+
+BETWEEN
+
+`r Lessor$pername` (`r Lessor$ACN`) as Trustee for the `r Lessor$TrustName` of care of `r Lessor$TrustAddress` ("Lessor")
+
+AND
+
+`r Lessee$pername` (`r Lessee$ACN`) as Trustee for the `r Lessee$TrustName` of care of `r Lessee$TrustAddress` ("Lessee")
+
+
+RECITALS
+
+The Lessor is the registered proprietor of the Leased Premises, in its capacity as trustee.
+
+The Lessor has agreed to lease the Leased Premises and the Lessee has agreed to take the Premises on lease, in its personal capacity and in its capacity as trustee, on the terms and conditions contained in this Deed.
+
+IT IS AGREED
+
+DEFINITIONS AND INTERPRETATION
+
+In this Deed:"Leased Premises" means the land located at `r Premises$Address`, being the whole of the land described in `r Premises$CertTitle` and any buildings erected on the land; "Permitted Purpose" means `r Lease$Purpose`; "Rent" means `r Rent$Start` per annum (exclusive of GST) at the commencement of this Lease or as may be subsequently varied pursuant to the terms of this Lease; "Term" means the `r Term$Period` period commencing on `r Term$Start` and ending on `r Term$End`, inclusive;"Option Period" means the period `r Option$Start` to `r Option$End` inclusive; "CPI" means the Consumer Price Index (All Groups) for Australia, or if the index is discontinued, the nearest equivalent index that measures economic inflation that it replaces.
+
+An example of the operation of any clause that is provided in this Deed may be used as an aid to interpretation of the clause.
+
+PARTIES AND CAPACITY
+
+To the extent that any party is expressed to be entering into this agreement as the trustee of a trust it hereby declares that it is: entering into this Lease personally and in the capacity of trustee; the sole trustee of the trust and that all of the powers and discretions conferred by the instrument creating the trust are capable of being validly exercised by it as trustee and they have not been varied or revoked.
+
+If the Lessee is the trustee of a trust, then it covenants and agrees with the Lessor that: the Lessor may enforce any of its remedies and rights pursuant to this Lease against the assets of the trust fund; and it will not do anything that will or may have the effect of harming or impairing the Lease or the assets of the Trust, other than in the ordinary course of business.  This includes without limitation variations of the trust deed, delegations of trust powers, distributions of trust property or income and the appointment of a new trustee.
+
+The parties shall exchange telephone numbers and contact details at the commencement of this Lease and shall update those details if they change.
+
+GRANT OF LEASE, QUIET ENJOYMENT AND RESERVATIONS 
+
+The Lessor grants to the Lease a lease of the Leased Premises for the Term (less any reservations in this Deed), subject to the Lessee complying with the terms and conditions of this Deed.
+
+The Lessor reserves the exclusive entitlement to: use the roofs and external walls of the building to erect and display advertisements and advertising signs; and install, on the external walls of the buildings or any part of the Leased Premises: "for sale" signs (but only if the building is offered for sale); and "For lease" signs (but only during the last two months of the lease term or any renewed term); enter into easements or other arrangements, which may bind the title to the Leased Premises, for the purpose of access, support or provision of services to one or more of the buildings, but not so as to create entitlements that would substantially or seriously interfere with the use and enjoyment of the Leased Premises by the Lessee.
+
+The Lessor convenants with the Lessee that whilst the Lessee complies with the obligations under this Lease and subject to the powers and entitlements conferred on the Lessor under this lease, the Lessee may occupy and have the use and enjoyment of the Leased Premises for the Term without interruption or disturbance from the Lessor save as provided by this lease.
+
+//Signage for future transactions is the primary concern here
+
+LESSOR'S WARRANTIES AND EXCLUSIONS
+
+The Lessor warrants that since the Lessor became the owner of the Leased Premises, the Lessor is not aware of any:notification relating to land contamination, pollution or the presence of dangerous or hazardous substances in the Leased Premises;existing investigations or inquiries by any government or regulatory authorities relating to the contamination of the land;treatment or work carried out on the Leased Premises relating to the removal of contamination of soil of the land; and current, pending or threatened dispute or litigation relating to the contamination of the land or any improvements on the land.
+
+The Lessee may, without prejudice to any other right or remedy, elect to terminate this Lease by giving one week's written notice to the Lessor if the Lessee discovers contamination that was not disclosed at the time of entering into this Lease.
+
+The Lessor is not liable to the Lessee and is excluded from liability for uninsured loss and damage to the Lessee's plant, equipment and other property and for loss of profits whilst the Lessee is using and occupying the Leased Premises.
+
+LESSOR'S RIGHT OF ENTRY
+
+The Lessor (and any persons authorised on the Lessor's behalf) is entitled to inspect the condition and state of the premises at reasonable times during business hours Monday to Friday (other than public holidays), on 7 days written notice to the Lessee, and no more frequently than quarterly unless reasonable in the circumstances.
+
+The Lessor is entitled to enter the Leased Premises in an emergency and for inspecting defects and other work required under the Lease.
+
+The Lessor is entitled to enter the Leased Premises for undertaking work that the Lessee has failed to carry out in breach of its obligations under this Lease.
+
+At any time that the Lessor enters the Leased Premises pursuant to the rights granted by this clause, the Lessor may bring contractors and consultants and tools, equipment and materials.
+
+Before entering the Premises to perform any work the Lessor must inform the Lessee of the purpose and likely duration of any intended work, except in an emergency, when prior notice is not required.
+
+If the Lessor wishes to show a prospective purchaser or mortgagor of the land the Leased Premises, then the Lessor, its employees agents and persons authorised by the Lessor may enter and remain on the Leased Premises during two hours in any week.
+
+If the Lessor wishes to show a prospective lessee the Leased Premises during the last two months of the Term, then the Lessor, its employees agents and persons authorised by the Lessor may enter and remain on the Leased Premises for reasonably short periods of time during that period.
+
+USE AND REPAIR OF LEASED PREMISES
+
+The Lessee agrees to use and occupy the Leased Premises throughout the term of this Lease at its own risk to itself and its property.  The Lessee agrees to indemnify the Lessor against any loss, damage, expense or claim including fines and legal costs on an indemnity basis as a consequence of the Lessee's failure to comply with this clause.
+
+The Lessee will not permit the Leased Premises to be use for any other purpose than the Permitted Purpose.  
+
+The Lessee agrees to conduct the business in the Leased Premises in an orderly, efficient and reputable manner, consistent with the standard and quality of the Leased Premises, with adequate staff, materials and facilities and due attention to maintaining the Leased Premises and fixtures and fittings in a clean, tidy and maintained condition.  
+
+The Lessee may apply to the Lessor for consent to a change of use during the Lease if there are no breaches of the Lessee's obligations under this Lease that have not been remedied to the Lessor's satisfaction.  
+
+The Lessor may reasonably withhold consent if the Lessee has not first obtained at its own expense, the necessary approvals for the proposed use and has paid the Lessor's reasonable costs associated with consent and the execution of any variation to the Permitted Use under the Lease.  
+
+The Lessor may refuse consent, in its sole discretion, if the proposed new use presents a security risk or is inappropriate having regard to the nature and standard of the buildings or the locality of the Leased Premises.
+
+The Lessee will ensure that the interior of the buildings on the Leased Premises and the fixtures, fittings and chattels are cleaned regularly.  
+
+The Lessee will ensure that all toilets, sinks, drainage and plumbing are used for the purposes for which they were designed and nothing is placed in them which they were not designed to receive or which would infringe health or environmental regulations.   
+
+The Lessee must promptly repair (with items of similar quality) any faulty, broken or damaged toilets, sinks, drainage or plumbing rendered unfit for use by incorrect use or disposal of inappropriate substances in them.
+
+The Lessee will, on a daily basis, place all rubbish in suitable containers in the area designated by the Lessor and remove trade waste from the Leased Premises.
+
+The Lessee will dispose of cartons, containers, packing material and other materials which are not removed by local authorities as part of the normal garbage removal service.
+
+The Lessee must promptly repair (with items of similar quality) any faulty, broken or damaged glass, electrical appliances or services, light globes, doors or locks.
+
+The Lessee must comply with all laws and legal requirements that apply to it in its business and in its use and occupation of the Leased Premises including, without limitation, those relating to the use and occupation of the premises by the Lessee's employees and other persons working in or entering the Leased Premises and health, safety and environmental regulations.
+
+The Lessee will not:allow the Leased Premises to be used for any illegal, immoral, noxious, dangerous or offensive purpose, activity or occupation and will not permit the use of any machinery, plant or equipment so as to cause noise or disturbance to the public or adjoining properties;  hold or permit any auction, public meeting in the Leased Premises; trade or display merchandise outside the Leased Premises; cover or obstruct entrance to or exit from the Leased Premises; cover or obstruct any windows, air-conditioning or ventilation ducts or outlets in any of the buildings on the Leased Premises; install any electrical equipment which will overload the supply of electricity to the building or the Leased Premises.  If such overloading occurs, the Lessee will be responsible for the cost of repair to the supply and damage to the Lessor's equipment and for any - upgrade required to adequately service the Lessee's installations; bring in, store or use any toxic, radioactive or hazardous chemicals, wastes or substances in the Leased Premises, without the Lessor's prior written consent.
+
+The Lessee will comply with the requirements imposed by the Lessor's insurer for the building and under fire safety regulations.  This includes, without limitation, the installation, repair and maintenance of fire alarms, sprinklers and fire prevention equipment in the Leased Premises and the performance and observance of any fire drills and emergency evacuation procedures.
+
+The Lessee must not duplicate any keys to the Leased Premises received from the Lessor.  The Lessee shall only provide the keys to its employees and must maintain a register of all employees provided with keys.  The Lessee shall notify the Lessor if any keys are lost, destroyed or stolen and return outstanding keys upon expiry or termination of the Lease.  The Lessee shall reimburse the Lessor for supplying any replacement or additional keys.
+
+The Lessor must keep the buildings and Leased Premises in good repair having regard to the quality, nature, character, situation and age of them, in keeping with comparable commercial premises in the area, subject to the Lessee's obligation to maintain the Leased Premises.
+
+The Lessor must take reasonable action to promptly repair defects know to the Lessor for which the Lessor is responsible that seriously interfere with the Lessee's use and enjoyment of the Leased Premises.
+
+The Lessee must keep the Leased Premises in good repair and working condition throughout the Term.
+
+The Lessee must promptly repair any damage or breakage to the Leased Premises including to the services to the Leased Premises and any damage caused by the Lessee affixing or removing equipment as permitted by this Lease.
+
+The Lessee must take reasonable precautions to keep the Leased Premises free of cockroaches, insects, rodents and other vermin and if necessary must employ and pay the fees of professional pest controllers to eradicate vermin.
+
+The Lessor may at any time serve on the Lessee a notice specifying any repair, alteration or maintenance which the Lessor requires the Lessee to carry out in accordance with its obligations under this Lease.  The notice must indicate in what respects the Lessee is in breach of those obligations and require the Lessee to remedy those breaches within the time specific in the notice.
+
+If the Lessee fails to comply with a valid notice served by the Lessor, the Lessor may carry out all or any of the work specified in the notice and recover from the Lessee the reasonable cost of doing the work and terminate the Lease. 
+
+ALTERATION AND BUILDING WORK
+
+The Lessor may carry out any building work to improve the appearance, quality, or physical arrangement of the buildings or to improve the convenience or safety of the Lessee and others using the buildings, unless it would be unreasonably alter or interfere with the Leased Premises or detract from the overall services provided for the Lessee's occupation.
+
+The Lessor must repair, renovate or repair the building, extend or alter the building or car parking facilities or access to the Leased Premises by pedestrians and vehicles, without undue interference, noise or nuisance to the Lessee's use and enjoyment of the Leased Premises.
+
+The Lessor must endeavour to carry out any permitted building work outside usual business hours, with the minimum of disruption to the Lessee and its property, and so as to return the Leased Premises to at least the condition and state of cleanliness that existed prior to the work being undertaken. 
+
+The Lessee is entitled to inspect any working drawings, plans or specifications that concern building work to be undertaken by the Lessor.
+
+The Lessee must not alter or add to the Leased Premises or the services (for which operating expenses are payable) without the Lessor's prior written consent.  This extends to marking or defacing surfaces of any building.  For minor additions, the Lessee may insert screws or nails into the walls or floors of the Leased Premises to affix equipment used by the Lessee in its business.
+
+Any building work carried out by either party must be carried out promptly and with minimal interference to the other party.  Any building work must be carried out with quality workmanship and materials and by appropriately licensed and qualified tradespersons.
+
+INDEMNITY
+
+The Lessee agrees to indemnify the Lessor from and against loss and damage that the Lessor may suffer or be liable for during or after the term of this Lease in respect of or arising from an act or omission of the Lessee.
+This clause does not apply to loss and damage caused by the wilful or negligent act or omission of the Lessor or to the extent that the Lessor recovers under an insurance policy for all of that loss or damage.
+
+ABANDONMENT 
+
+If the Lessee vacates or abandons the Leased Premises during the Term in breach of the Lessee's obligations under this Lease, then the Lessee's obligations to pay rent, operating expenses and comply with the Lease continue up until termination of this Lease, notwithstanding the abandonment.  Also, the Lessor may take steps to re-secure the Leased Premises, clean or repair them and show them to prospective tenants without the Lessor's conduct constituting a re-entry or termination of this Lease or the acceptance of a surrender of this lease. 
+
+LESSEE'S OBLIGATIONS AT END OF TERM
+
+At the end of the Term the Lessee must give up the Leased Premises to the Lessor in the state of repair and condition it was in at the commencement of this Lease and remove all of its property and any alterations, additions, fittings inserted or installed by the Lessee.  The Lessee must also make good, in a proper and workmanlike manner, any damage caused to the Leased Premises by the Lessee's installations or removals.
+
+The work required by this clause must be completed prior to the Term or if the Lease is terminated suddenly or unexpectedly, within 14 days after the termination of the Lease.
+
+The work required by this clause is not completed by the Lessee, then the Lessor may cause the repairs or reinstatement to be carried out at the Lessee's expense, and recover from the Lessee as damages the loss of rent and operating expenses from the date of termination until the date of restoration, or until a new tenant is found, at the Lessor's election.
+
+If the Lessee fails to remove any of its property from the Leased Premises before the expiry of the Lease or within 7 days after the Lease is terminated (as the case may be), then the Lessee agrees to indemnify the Lessor against all costs, loss and damage to the lessee's property.  The Lessor may also have the Lessee's property removed from the Leased Premises and stored at the Lessee's expense, or sell the property as the Lessee's agent, or at its election take title to that property by way of abandonment, without having to account to the Lessee. 
+If the Lessee remains in occupation of the Leased Premises after the expiry of the Term with the consent of the Lessor but without entry into a new lease, the Lease continues as a monthly tenancy on expiry of the Term on the same Terms of this Lease as are applicable, until terminated upon a month's notice to the other party.
+If the Lessee remains in occupation of the Leased Premises after the expiry of the Term without the consent of the Lessor then the Lessor may accept rent without prejudice to its rights to possession and damages.
+
+
+
