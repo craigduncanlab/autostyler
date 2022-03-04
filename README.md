@@ -6,6 +6,14 @@ This app will take plain text and transform into a .docx file in the output fold
 
 It uses simple AI to infer styles by document type.
 
+It will turn this:
+
+![InputPage](images/input.png?raw=true)
+
+into this:
+
+![OutputPage](images/output.png?raw=true)
+
 # Specifying input document type
 
 Options (include one of theses lines at top of input file):
