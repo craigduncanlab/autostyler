@@ -4,7 +4,7 @@
 
 This app will take plain text and transform into a .docx file in the output folder
 
-It uses simple AI to infer styles by document type.  In other words, I'm using a kind of 'no markdown', but that's not completely true, because even ordinary writing is a kind of markdown, if you know how to interpret it.  There's meaning in everything!
+It uses simple AI to infer styles by document type.  In other words, I'm using a kind of 'no markup', but that's not completely true, because even ordinary writing is a kind of markup, if you know how to interpret it.  There's meaning in everything!
 
 It will turn this:
 
